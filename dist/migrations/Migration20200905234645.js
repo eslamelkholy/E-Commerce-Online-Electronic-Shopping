@@ -8,19 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@mikro-orm/core");
-const item_1 = require("./entities/item");
-const mikro_orm_config_1 = __importDefault(require("./mikro-orm.config"));
-const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    const orm = yield core_1.MikroORM.init(mikro_orm_config_1.default);
-    yield orm.getMigrator().up();
-    const ItemTest = orm.em.create(item_1.Item, { price: 1000, description: "Hello Iphone", title: "Simple Test Iphone" });
-    yield orm.em.persistAndFlush(ItemTest);
-    yield orm.em.nativeInsert(item_1.Item, { title: "iphone2" });
-});
-main();
-//# sourceMappingURL=index.js.map
+exports.Migration20200905234645 = void 0;
+const migrations_1 = require("@mikro-orm/migrations");
+class Migration20200905234645 extends migrations_1.Migration {
+    up() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.addSql('create table "item" ("id" serial primary key, "created_at" jsonb not null, "updated_at" jsonb not null, "title" varchar(255) not null, "description" varchar(255) not null, "price" int4 not null);');
+        });
+    }
+}
+exports.Migration20200905234645 = Migration20200905234645;
+//# sourceMappingURL=Migration20200905234645.js.map

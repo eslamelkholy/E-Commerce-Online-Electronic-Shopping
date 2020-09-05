@@ -1,18 +1,13 @@
 import { MikroORM } from "@mikro-orm/core";
-import dotenv from "dotenv";
-import { __PROD__ } from "./constants";
-dotenv.config();
+import { Item } from "./entities/item";
+import mikroConfig from "./mikro-orm.config";
 
-console.log(process.env["DB_NAME"]);
 const main = async () => {
-  const orm = await MikroORM.init({
-    entities: [],
-    dbName: process.env.DB_NAME,
-    user: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    type: "postgresql",
-    debug: !__PROD__,
-  });
+  const orm = await MikroORM.init(mikroConfig);
+  await orm.getMigrator().up();
+  const ItemTest = orm.em.create(Item, { price: 1000, description: "Hello Iphone", title: "Simple Test Iphone" });
+  await orm.em.persistAndFlush(ItemTest);
+  await orm.em.nativeInsert(Item, { title: "iphone2" });
 };
 
 main();
