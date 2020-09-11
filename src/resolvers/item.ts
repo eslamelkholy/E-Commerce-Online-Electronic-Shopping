@@ -1,17 +1,17 @@
-import { Item } from "../entities/item";
+import { Item } from "../entities/Item";
 import { Resolver, Query, Ctx, Arg, Mutation } from "type-graphql";
 import { MyContext } from "../types";
 
 @Resolver()
 export class ItemResolver {
+  @Query(() => Item, { nullable: true })
+  item(@Arg("id") id: number, @Ctx() { em }: MyContext): Promise<Item | null> {
+    return em.findOne(Item, { id });
+  }
+
   @Query(() => [Item!])
   items(@Ctx() { em }: MyContext): Promise<Item[]> {
     return em.find(Item, {});
-  }
-
-  @Query(() => Item, { nullable: true }) //Graphql Type
-  item(@Arg("id") id: number, @Ctx() { em }: MyContext): Promise<Item | null> {
-    return em.findOne(Item, { id });
   }
 
   @Mutation(() => Item)
@@ -24,14 +24,6 @@ export class ItemResolver {
     const newItem = em.create(Item, { title, description, price });
     await em.persistAndFlush(newItem);
     return newItem;
-  }
-
-  @Mutation(() => Boolean)
-  async deleteItem(@Arg("id") id: number, @Ctx() { em }: MyContext): Promise<boolean> {
-    const item = await em.findOne(Item, { id });
-    if (!item) return false;
-    await em.nativeDelete(Item, item);
-    return true;
   }
 
   @Mutation(() => Item, { nullable: true })
@@ -49,5 +41,13 @@ export class ItemResolver {
     item.description = description;
     await em.persistAndFlush(item);
     return item;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteItem(@Arg("id") id: number, @Ctx() { em }: MyContext): Promise<boolean> {
+    const item = await em.findOne(Item, { id });
+    if (!item) return false;
+    await em.nativeDelete(Item, item);
+    return true;
   }
 }

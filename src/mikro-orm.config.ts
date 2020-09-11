@@ -1,12 +1,13 @@
 import { __PROD__ } from "./constants";
-import { Item } from "./entities/item";
+import { Item } from "./entities/Item";
 import { MikroORM } from "@mikro-orm/core";
 import dotenv from "dotenv";
 import path from "path";
+import { User } from "./entities/User";
 dotenv.config();
 
 export default {
-  entities: [Item],
+  entities: [Item, User],
   dbName: process.env.DB_NAME,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,

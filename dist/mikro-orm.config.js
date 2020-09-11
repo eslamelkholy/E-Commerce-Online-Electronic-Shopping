@@ -4,12 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("./constants");
-const item_1 = require("./entities/item");
+const Item_1 = require("./entities/Item");
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
+const User_1 = require("./entities/User");
 dotenv_1.default.config();
 exports.default = {
-    entities: [item_1.Item],
+    entities: [Item_1.Item, User_1.User],
     dbName: process.env.DB_NAME,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
