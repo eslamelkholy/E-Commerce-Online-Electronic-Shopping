@@ -1,5 +1,6 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { BeforeCreate, BeforeUpdate, Entity, PrimaryKey, Property } from "@mikro-orm/core";
 import { Field, ObjectType } from "type-graphql";
+import aragon2 from "argon2";
 
 @ObjectType()
 @Entity()
@@ -26,4 +27,10 @@ export class User {
   @Field(() => String)
   @Property({ type: "date", onUpdate: () => new Date() })
   updatedAt = new Date();
+
+  @BeforeUpdate()
+  @BeforeCreate()
+  async hashPassword(): Promise<void> {
+    this.password = await aragon2.hash(this.password);
+  }
 }
