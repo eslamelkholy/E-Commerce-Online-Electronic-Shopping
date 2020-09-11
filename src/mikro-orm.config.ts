@@ -4,6 +4,7 @@ import { MikroORM } from "@mikro-orm/core";
 import dotenv from "dotenv";
 import path from "path";
 dotenv.config();
+
 export default {
   entities: [Item],
   dbName: process.env.DB_NAME,

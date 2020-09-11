@@ -13,14 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@mikro-orm/core");
-const item_1 = require("./entities/item");
 const mikro_orm_config_1 = __importDefault(require("./mikro-orm.config"));
+const express_1 = __importDefault(require("express"));
+const apollo_server_express_1 = require("apollo-server-express");
+const type_graphql_1 = require("type-graphql");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const orm = yield core_1.MikroORM.init(mikro_orm_config_1.default);
     yield orm.getMigrator().up();
-    const ItemTest = orm.em.create(item_1.Item, { price: 1000, description: "Hello Iphone", title: "Simple Test Iphone" });
-    yield orm.em.persistAndFlush(ItemTest);
-    yield orm.em.nativeInsert(item_1.Item, { title: "iphone2" });
+    const app = express_1.default();
+    const apolloServer = new apollo_server_express_1.ApolloServer({
+        schema: yield type_graphql_1.buildSchema({
+            resolvers: [],
+            validate: false,
+        }),
+    });
+    app.listen(3000, () => console.log("Connected On localhost:3000"));
 });
-main();
+main().catch((err) => console.log(err));
 //# sourceMappingURL=index.js.map
